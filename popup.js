@@ -26,10 +26,13 @@ async function save() {
 }
 
 const call = async (type, label) => {
-  show(label + '...');
   await save();
-  const r = await chrome.runtime.sendMessage({ type });
-  return r;
+  show(label + '...');
+  try {
+    return (await chrome.runtime.sendMessage({ type })) || { ok: false, msg: 'No response from background worker' };
+  } catch (err) {
+    return { ok: false, msg: err.message };
+  }
 };
 
 $('save').onclick = save;
@@ -43,7 +46,8 @@ $('stats').onclick = async () => {
 };
 $('retry').onclick = async () => {
   const r = await call('RETRY', 'Retrying');
-  $('qcount').textContent = r.remaining ?? 0;
+  const { queue = [] } = await chrome.storage.local.get('queue');
+  $('qcount').textContent = queue.length;
   show(r.ok ? `Queue remaining: ${r.remaining}` : r.msg, r.ok);
 };
 

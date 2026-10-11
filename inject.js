@@ -4,10 +4,12 @@
   if (window.__gfgSyncHooked) return;
   window.__gfgSyncHooked = true;
 
+  // ===== GFG CONFIG: UNVERIFIED guesses — see docs/gfg-selectors.md =====
   const CONFIG = {
     successRe: /problem solved successfully/i,   // text GFG shows/returns on an accepted submission
     submitUrlRe: /submit|submission/i,           // network calls worth inspecting
   };
+  // ===== end GFG CONFIG =====
 
   let lastReqBody = null;
   const post = (type, payload) =>
@@ -40,7 +42,8 @@
   window.fetch = async function (...args) {
     const res = await origFetch.apply(this, args);
     try {
-      const url = typeof args[0] === 'string' ? args[0] : args[0]?.url || '';
+      const input = args[0];
+      const url = input instanceof Request ? input.url : String(input ?? '');
       if (CONFIG.submitUrlRe.test(url)) {
         const body = args[1]?.body;
         if (typeof body === 'string') lastReqBody = body;
