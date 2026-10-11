@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <h1>GFG GitHub Sync</h1>
+
+  <label class="row"><input type="checkbox" id="enabled" /> Enable auto-sync</label>
+
+  <label>GitHub token (needs repo write access)
+    <input type="password" id="token" placeholder="github_pat_..." />
+  </label>
+  <label>Repository (owner/name)
+    <input id="repo" placeholder="yourname/gfg-solutions" />
+  </label>
+  <label>Branch
+    <input id="branch" placeholder="main" />
+  </label>
+  <label>GFG username (for rank/score)
+    <input id="handle" placeholder="your-gfg-handle" />
+  </label>
+  <label>Commit message template
+    <input id="template" />
+  </label>
+
+  <div class="btns">
+    <button id="save">Save</button>
+    <button id="test" class="secondary">Test connection</button>
+  </div>
+  <div class="btns">
+    <button id="stats" class="secondary">Refresh GFG stats</button>
+    <button id="retry" class="secondary">Retry queue (<span id="qcount">0</span>)</button>
+  </div>
+
+  <div id="status" class="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

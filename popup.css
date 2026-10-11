@@ -1,0 +1,12 @@
+:root { color-scheme: light dark; --bg:#fff; --fg:#1b1b1b; --muted:#666; --line:#d0d0d0; --accent:#2f8d46; }
+@media (prefers-color-scheme: dark) { :root { --bg:#1e1e1e; --fg:#eee; --muted:#aaa; --line:#444; } }
+body { width: 320px; padding: 14px; margin: 0; font: 13px system-ui, sans-serif; background: var(--bg); color: var(--fg); }
+h1 { font-size: 16px; margin: 0 0 10px; }
+label { display: block; margin: 8px 0; color: var(--muted); }
+label.row { color: var(--fg); }
+input:not([type=checkbox]) { width: 100%; box-sizing: border-box; margin-top: 3px; padding: 6px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--fg); }
+.btns { display: flex; gap: 8px; margin-top: 10px; }
+button { flex: 1; padding: 7px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; cursor: pointer; }
+button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+.status { margin-top: 12px; min-height: 18px; word-break: break-word; }
+.ok { color: #2e7d32; } .err { color: #c62828; }
