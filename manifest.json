@@ -3,25 +3,47 @@
   "name": "GFG GitHub Sync",
   "version": "0.1.0",
   "description": "Automatically commit your accepted GeeksforGeeks solutions to GitHub and keep a stats README updated.",
-  "permissions": ["storage", "alarms"],
+  "homepage_url": "https://github.com/nishant4605/gfg-github-sync",
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
   "host_permissions": [
     "https://*.geeksforgeeks.org/*",
     "https://api.github.com/*"
   ],
-  "background": { "service_worker": "background.js", "type": "module" },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
-      "matches": ["https://*.geeksforgeeks.org/*"],
-      "js": ["inject.js"],
+      "matches": [
+        "https://*.geeksforgeeks.org/*"
+      ],
+      "js": [
+        "inject.js"
+      ],
       "run_at": "document_start",
       "world": "MAIN"
     },
     {
-      "matches": ["https://*.geeksforgeeks.org/*"],
-      "js": ["content.js"],
+      "matches": [
+        "https://*.geeksforgeeks.org/*"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
-  "action": { "default_popup": "popup.html", "default_title": "GFG GitHub Sync" },
-  "icons": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" }
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "GFG GitHub Sync"
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  }
 }

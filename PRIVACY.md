@@ -28,4 +28,4 @@ Nothing is sent to the developer or to any third party. The extension never logs
 Uninstalling the extension deletes all locally stored data. Revoke the token at <https://github.com/settings/tokens> if you no longer use it. Files already committed to your repository stay there until you delete them.
 
 ## Contact
-Open an issue on the project's GitHub repository.
+Open an issue at <https://github.com/nishant4605/gfg-github-sync/issues>.

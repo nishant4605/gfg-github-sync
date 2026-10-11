@@ -2,7 +2,7 @@
 
 Free, open-source Chrome extension (Manifest V3) that commits your accepted GeeksforGeeks solutions to a GitHub repo, organized by difficulty/contest, and keeps a stats README (solved count, difficulty split, streak, rank, score) up to date. Like LeetHub, but for GFG.
 
-No servers, no analytics. See [PRIVACY.md](PRIVACY.md).
+No servers, no analytics. See [PRIVACY.md](PRIVACY.md). Found a bug or GFG changed its site? [Open an issue](https://github.com/nishant4605/gfg-github-sync/issues).
 
 ## Setup
 1. `chrome://extensions` → enable **Developer mode** → **Load unpacked** → pick this folder.
