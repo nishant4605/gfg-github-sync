@@ -86,3 +86,10 @@ test('upsertEntry keeps contest and practice entries separate', () => {
   upsertEntry(index, sub({ contest: 'weekly-1' }), CPP, 'C', '2026-10-11');
   assert.deepEqual(Object.keys(index.problems).sort(), ['practice/reverse-a-string', 'weekly-1/reverse-a-string']);
 });
+
+test('upsertEntry heals raw language labels from older syncs', () => {
+  const index = emptyIndex();
+  upsertEntry(index, sub(), { name: 'C++ (17)' }, 'P', '2026-10-11');
+  const { entry } = upsertEntry(index, sub(), CPP, 'P', '2026-10-12');
+  assert.deepEqual(entry.languages, ['C++']);
+});

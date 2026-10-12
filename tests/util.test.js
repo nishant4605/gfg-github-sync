@@ -10,6 +10,13 @@ test('normLang maps GFG aliases to display name + ext', () => {
   assert.deepEqual(normLang(' JavaScript '), { name: 'JavaScript', ext: 'js' });
 });
 
+test('normLang strips GFG version suffixes (verified 2026-10-12: "C++ (17)")', () => {
+  assert.deepEqual(normLang('C++ (17)'), { name: 'C++', ext: 'cpp' });
+  assert.deepEqual(normLang('Java (1.8)'), { name: 'Java', ext: 'java' });
+  assert.deepEqual(normLang('Python3'), { name: 'Python', ext: 'py' });
+  assert.deepEqual(normLang('Python 3.10'), { name: 'Python', ext: 'py' });
+});
+
 test('normLang guesses from code when language missing', () => {
   assert.equal(normLang(null, '#include <bits/stdc++.h>').ext, 'cpp');
   assert.equal(normLang('', 'public class Main {}').ext, 'java');
