@@ -23,6 +23,7 @@ function renderAuth({ auth = {}, token, authMethod }) {
   $('login').textContent = auth.login || '';
   $('gh-error').hidden = auth.state !== 'error';
   $('gh-error').textContent = auth.msg || '';
+  $('revoke').hidden = !auth.disconnected;
   if (!connected && authMethod !== 'oauth' && token) $('advanced').open = true; // manual token in use
 }
 

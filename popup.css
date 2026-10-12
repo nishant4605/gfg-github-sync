@@ -19,4 +19,5 @@ button.secondary { background: transparent; color: var(--fg); border: 1px solid 
 .small { font-size: 12px; margin-top: 6px; }
 button.link { width: auto; background: none; border: 0; color: var(--muted); text-decoration: underline; padding: 0; flex: none; }
 details { margin: 8px 0; }
+#revoke { display: block; margin-top: 8px; color: var(--muted); }
 summary { cursor: pointer; color: var(--muted); }

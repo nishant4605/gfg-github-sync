@@ -130,7 +130,7 @@ async function pollLogin(flow) {
 }
 
 async function logout() {
-  await chrome.storage.local.set({ token: '', authMethod: '', auth: { state: 'idle' } });
+  await chrome.storage.local.set({ token: '', authMethod: '', auth: { state: 'idle', disconnected: true } });
   return { ok: true };
 }
 
