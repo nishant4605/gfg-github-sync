@@ -1,6 +1,8 @@
-# GFG GitHub Sync
+# GeekSync
 
-Free, open-source Chrome extension (Manifest V3) that commits your accepted GeeksforGeeks solutions to a GitHub repo, organized by difficulty/contest, and keeps a stats README (solved count, difficulty split, streak, rank, score) up to date. Like LeetHub, but for GFG.
+**GeeksforGeeks → GitHub, with streak & stats.** Free, open-source Chrome extension (Manifest V3) that commits your accepted GeeksforGeeks solutions to a GitHub repo, organized by difficulty/contest, and keeps a stats README (solved count, difficulty split, streak, rank, score) up to date. Like LeetHub, but for GFG.
+
+> GeekSync is an independent project and is not affiliated with or endorsed by GeeksforGeeks.
 
 No servers, no analytics. See [PRIVACY.md](PRIVACY.md). Found a bug or GFG changed its site? [Open an issue](https://github.com/nishant4605/gfg-github-sync/issues).
 
@@ -14,7 +16,7 @@ No servers, no analytics. See [PRIVACY.md](PRIVACY.md). Found a bug or GFG chang
 Prefer not to use OAuth? Open **Advanced** in the popup and paste a [fine-grained token](https://github.com/settings/personal-access-tokens/new) (that repo only, **Contents: Read and write**).
 
 ### Maintainers: OAuth App registration (one time)
-[New OAuth App](https://github.com/settings/applications/new): name `GFG GitHub Sync`, homepage = this repo, callback URL = this repo (unused by device flow), tick **Enable Device Flow**. Put the **Client ID** (not a secret) in `lib/auth.js` → `GITHUB_CLIENT_ID`. Never create or commit a client secret; device flow doesn't need one.
+[New OAuth App](https://github.com/settings/applications/new): name `GeekSync`, homepage = this repo, callback URL = this repo (unused by device flow), tick **Enable Device Flow**. Put the **Client ID** (not a secret) in `lib/auth.js` → `GITHUB_CLIENT_ID`. Never create or commit a client secret; device flow doesn't need one.
 
 ## What gets committed
 ```
@@ -38,8 +40,8 @@ After editing, click ↻ on the extension in `chrome://extensions` **and refresh
 
 ## If nothing syncs
 GFG changes its site. Every guess lives in one marked `GFG CONFIG` block. See [docs/gfg-selectors.md](docs/gfg-selectors.md) for the list and a DevTools recon snippet.
-- Service worker logs: `chrome://extensions` → GFG GitHub Sync → "service worker" link.
-- Page logs: DevTools console on the GFG tab, filter `[GFG Sync]`.
+- Service worker logs: `chrome://extensions` → GeekSync → "service worker" link.
+- Page logs: DevTools console on the GFG tab, filter `[GeekSync]`.
 
 ## Manual test checklist
 - [ ] Load unpacked; no errors on `chrome://extensions`

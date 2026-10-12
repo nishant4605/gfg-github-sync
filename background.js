@@ -70,7 +70,7 @@ async function handleSubmission(sub, fromQueue = false) {
     await setStatus(true, changed ? `Synced: ${sub.title}` : `Already up to date (same code): ${sub.title}`);
     return { ok: true };
   } catch (err) {
-    console.error('[GFG Sync] sync failed:', err);
+    console.error('[GeekSync] sync failed:', err);
     await setStatus(false, `${sub.title}: ${err.message}`);
     if (!fromQueue) await pushToQueue(sub);
     return { ok: false, msg: err.message };

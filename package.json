@@ -1,5 +1,5 @@
 {
-  "name": "gfg-github-sync",
+  "name": "geeksync",
   "version": "0.1.0",
   "private": true,
   "description": "Dev-only manifest for running unit tests. The extension itself has no npm dependencies.",

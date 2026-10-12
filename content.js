@@ -57,20 +57,20 @@ function scrapeMeta(reqBody) {
 }
 
 window.addEventListener('message', (ev) => {
-  if (ev.source !== window || ev.data?.source !== 'gfg-sync' || ev.data.type !== 'SUCCESS') return;
+  if (ev.source !== window || ev.data?.source !== 'geeksync' || ev.data.type !== 'SUCCESS') return;
   const now = Date.now();
   if (now - lastSent < 8000) return; // dedupe fetch + XHR + DOM firing together
   lastSent = now;
 
   const { code, reqBody } = ev.data.payload || {};
-  if (!code) { console.warn('[GFG Sync] Success detected but editor code not found.'); return; }
+  if (!code) { console.warn('[GeekSync] Success detected but editor code not found.'); return; }
   const payload = { ...scrapeMeta(reqBody), code, solvedAt: new Date().toISOString() };
-  console.log('[GFG Sync] Submission detected:', payload.title, payload.difficulty, payload.language);
+  console.log('[GeekSync] Submission detected:', payload.title, payload.difficulty, payload.language);
   // After the extension is reloaded, scripts in already-open tabs lose chrome.runtime. Expected, not an error.
   if (!chrome.runtime?.id) {
-    console.info('[GFG Sync] Extension was reloaded; refresh this tab (F5) to resume syncing.');
+    console.info('[GeekSync] Extension was reloaded; refresh this tab (F5) to resume syncing.');
     return;
   }
   chrome.runtime.sendMessage({ type: 'SUBMISSION', payload })
-    .catch((e) => console.info('[GFG Sync] Could not reach the extension; refresh this tab (F5).', e.message));
+    .catch((e) => console.info('[GeekSync] Could not reach the extension; refresh this tab (F5).', e.message));
 });

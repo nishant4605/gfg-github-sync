@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "GFG GitHub Sync",
+  "name": "GeekSync – GeeksforGeeks to GitHub, with Streak & Stats",
+  "short_name": "GeekSync",
   "version": "0.1.0",
-  "description": "Automatically commit your accepted GeeksforGeeks solutions to GitHub and keep a stats README updated.",
+  "description": "Auto-push accepted GeeksforGeeks solutions to GitHub with a stats README: streak, rank, score, badges. Not affiliated with GFG.",
   "homepage_url": "https://github.com/nishant4605/gfg-github-sync",
   "permissions": [
     "storage",
@@ -40,7 +41,7 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "GFG GitHub Sync"
+    "default_title": "GeekSync"
   },
   "icons": {
     "16": "icons/16.png",

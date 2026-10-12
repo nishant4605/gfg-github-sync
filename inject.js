@@ -1,8 +1,8 @@
 // Runs in the PAGE context (world: MAIN) so it can hook fetch/XHR and read the code editor.
 // All GFG-specific guesses live in CONFIG so they are easy to fix when GFG changes its site.
 (() => {
-  if (window.__gfgSyncHooked) return;
-  window.__gfgSyncHooked = true;
+  if (window.__geekSyncHooked) return;
+  window.__geekSyncHooked = true;
 
   // ===== GFG CONFIG: UNVERIFIED guesses — see docs/gfg-selectors.md =====
   const CONFIG = {
@@ -13,7 +13,7 @@
 
   let lastReqBody = null;
   const post = (type, payload) =>
-    window.postMessage({ source: 'gfg-sync', type, payload }, '*');
+    window.postMessage({ source: 'geeksync', type, payload }, '*');
 
   function getCode() {
     try {

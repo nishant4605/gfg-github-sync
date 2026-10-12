@@ -1,8 +1,8 @@
-# Privacy Policy: GFG GitHub Sync
+# Privacy Policy: GeekSync
 
 _Last updated: 2026-10-11_
 
-GFG GitHub Sync is a free, open-source browser extension. It has no servers, no analytics, and no tracking.
+GeekSync is a free, open-source browser extension. It has no servers, no analytics, and no tracking.
 
 ## What the extension stores
 Everything is stored only in your browser via `chrome.storage.local`:
@@ -26,7 +26,7 @@ Nothing is sent to the developer or to any third party. The extension never logs
 | `https://github.com/login/*` | "Connect GitHub" sign-in (OAuth device flow) |
 
 ## Removing your data
-Uninstalling the extension deletes all locally stored data. To revoke access, click Disconnect in the popup and remove "GFG GitHub Sync" at <https://github.com/settings/applications> (or delete your personal access token at <https://github.com/settings/tokens>). Files already committed to your repository stay there until you delete them.
+Uninstalling the extension deletes all locally stored data. To revoke access, click Disconnect in the popup and remove "GeekSync" at <https://github.com/settings/applications> (or delete your personal access token at <https://github.com/settings/tokens>). Files already committed to your repository stay there until you delete them.
 
 ## Contact
 Open an issue at <https://github.com/nishant4605/gfg-github-sync/issues>.
