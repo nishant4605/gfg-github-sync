@@ -40,7 +40,7 @@ async function syncSubmission(cfg, sub) {
   const { base, difficulty } = resolveTarget(index, sub);
   const msg = commitMessage(cfg.template, { title: sub.title, difficulty, language: lang.name, slug: sub.slug });
 
-  await putFile(cfg, `${base}/solution.${lang.ext}`, sub.code, msg);
+  const solution = await putFile(cfg, `${base}/solution.${lang.ext}`, sub.code, msg);
 
   const today = localDate(new Date(sub.solvedAt));
   const { entry } = upsertEntry(index, { ...sub, difficulty }, lang, base, today);
@@ -48,6 +48,7 @@ async function syncSubmission(cfg, sub) {
   await putFile(cfg, `${base}/README.md`, problemReadme(entry), `Update README: ${sub.title}`);
   await putFile(cfg, 'problems.json', JSON.stringify(index, null, 2) + '\n', `Update index: ${sub.title}`);
   await putFile(cfg, 'README.md', rootReadme(index), 'Update stats README');
+  return { changed: solution.changed };
 }
 
 async function pushToQueue(sub) {
@@ -64,8 +65,8 @@ async function handleSubmission(sub, fromQueue = false) {
     return { ok: false, msg: 'Not configured' };
   }
   try {
-    await syncSubmission(cfg, sub);
-    await setStatus(true, `Synced: ${sub.title}`);
+    const { changed } = await syncSubmission(cfg, sub);
+    await setStatus(true, changed ? `Synced: ${sub.title}` : `Already up to date (same code): ${sub.title}`);
     return { ok: true };
   } catch (err) {
     console.error('[GFG Sync] sync failed:', err);
