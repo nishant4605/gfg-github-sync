@@ -76,9 +76,15 @@ test('rootReadme: badges, stats rows, omits null rank', () => {
   assert.match(md, /badge\/Streak-2%20days-orange/);
   assert.match(md, /badge\/Score-900-purple/);
   assert.doesNotMatch(md, /badge\/Rank/);
-  assert.doesNotMatch(md, /\| Rank \|/);
+  assert.doesNotMatch(md, /Institute rank/);
   assert.match(md, /\| Problems solved on GFG \| 250 \|/);
   assert.match(md, /\| Current streak \| 2 days \|\n\| Longest streak \| 2 days \|/);
+});
+
+test('rootReadme: GFG API stats rows', () => {
+  const md = rootReadme({ ...structuredClone(index), stats: { solved: 83, score: 263, monthlyScore: 26, rank: 803, potdStreak: 1, potdLongest: 6 } }, NOW);
+  assert.match(md, /\| Monthly score \| 26 \|\n\| Institute rank \| 803 \|\n\| GFG POTD streak \| 1 day \|\n\| GFG POTD longest streak \| 6 days \|/);
+  assert.match(md, /badge\/Rank-803-blue/);
 });
 
 test('rootReadme: section order and tables', () => {

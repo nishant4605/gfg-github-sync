@@ -2,23 +2,25 @@
 
 Everything GFG-specific lives in these config blocks (marked `GFG CONFIG`):
 - `inject.js` → `CONFIG` (submit URL regex, success regex)
-- `content.js` → `SEL`, `DIFF_RE`, `DIFF_TEXT_RE`
-- `lib/util.js` → `GFG_PROFILE_URL`, `STATS_PATTERNS`
+- `content.js` → `SEL`, `DIFF_RE`, `DIFF_TEXT_RE`, `TITLE_BADGE_RE`
+- `lib/util.js` → `GFG_STATS_URL`, `STATS_FIELDS`
 
 ## Status
 
-| # | Item | Current guess | Verified? | Date | Notes |
+| # | Item | Current implementation | Verified? | Date | Notes |
 |---|---|---|---|---|---|
-| 1 | Submit endpoint URL | `/submit\|submission/i` | ❌ | | |
-| 1 | Accepted-response marker | `/problem solved successfully/i` in body | ❌ | | |
-| 2 | Editor | Ace → Monaco → CodeMirror | ❌ | | |
-| 3 | Title selector | `h1, h3[class*=problem], [class*=problems_header_content__title]` | ❌ | | |
-| 3 | Difficulty selector | `[class*=difficulty]` + regex | ❌ | | |
-| 3 | Tags selector | `[class*=topic] a, [class*=tag] a` | ❌ | | |
-| 3 | Language source | submit body `language/lang/langId`, else dropdown | ❌ | | |
+| 1 | Accepted-submission detection | fetch/XHR hook on `/submit|submission/i` + DOM text `/problem solved successfully/i` | ✅ works | 2026-10-12 | Two practice problems synced end-to-end. Which of the 3 signals fires first not yet recorded |
+| 2 | Editor code | Ace → Monaco → CodeMirror | ✅ works | 2026-10-12 | Full C++ source captured. Exact editor not yet recorded |
+| 3 | Title | `SEL.title`, prefer `document.title` prefix | ✅ fixed | 2026-10-12 | Title element gains a "Solved" badge after the first solve ("…Full CutsSolved") |
+| 3 | Difficulty | `[class*=difficulty]` + regex | ✅ works | 2026-10-12 | "Medium", "Easy" scraped correctly |
+| 3 | Language | submit body / dropdown | ✅ fixed | 2026-10-12 | GFG label is "C++ (17)"; `normLang` strips the version |
+| 3 | Tags | `[class*=topic] a, [class*=tag] a` | ⚠️ partial | 2026-10-12 | Mixes **company** tags (Amazon, Microsoft…) with topics; also matched the problem's own title (now filtered). Need hrefs to split |
 | 4 | Contest URL/DOM | `/contest/<name>/` in path | ❌ | | |
-| 5 | Profile stats keys | `total_problems_solved`, `score`, `institute_rank` | ❌ | | |
+| 5 | Profile stats | `GET authapi.geeksforgeeks.org/api-get/user-profile-info/?handle=<h>&article_count=false&redirect=true` | ✅ | 2026-10-12 | Public JSON, no login. `data.{score, monthly_score, total_problems_solved, institute_rank, pod_solved_current_streak, pod_solved_longest_streak}`. Unknown handle → 400 `{"message":"User not found!"}`. The profile HTML (Next.js app router, `self.__next_f`) does **not** contain stats. `utilapi…/api/user/profile/` is session/geo info only |
 | 6 | POTD page | same as practice? | ❌ | | |
+
+### Other endpoints seen (not used yet)
+- `POST practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/` body `{"handle":"<h>","requestType":"","year":"","month":""}` → `result.{Easy,Medium,…}.{id}.{slug,pname,lang,user_subtime}`. Public. Candidate for a future "import my past solved problems" feature (metadata only, no code).
 
 ## Recon snippet
 

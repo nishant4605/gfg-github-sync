@@ -57,10 +57,19 @@ test('localDate pads month/day', () => {
   assert.equal(localDate(new Date(2026, 0, 5)), '2026-01-05');
 });
 
-test('parseGfgStats returns nulls for missing keys', () => {
-  assert.deepEqual(parseGfgStats('<html></html>'), { solved: null, score: null, rank: null });
-  assert.deepEqual(
-    parseGfgStats('{"total_problems_solved":250,"score":"900","institute_rank":1234}'),
-    { solved: 250, score: 900, rank: 1234 },
-  );
+const NULL_STATS = { solved: null, score: null, monthlyScore: null, rank: null, potdStreak: null, potdLongest: null };
+
+test('parseGfgStats maps the verified API shape (2026-10-12)', () => {
+  const json = { message: 'data retrieved successfully', data: {
+    score: 263, monthly_score: 26, total_problems_solved: 83, institute_rank: 803,
+    pod_solved_longest_streak: 6, pod_solved_current_streak: 6, name: 'x',
+  } };
+  assert.deepEqual(parseGfgStats(json), { solved: 83, score: 263, monthlyScore: 26, rank: 803, potdStreak: 6, potdLongest: 6 });
+});
+
+test('parseGfgStats returns nulls for missing/garbage values', () => {
+  assert.deepEqual(parseGfgStats({}), NULL_STATS);
+  assert.deepEqual(parseGfgStats(null), NULL_STATS);
+  assert.deepEqual(parseGfgStats({ data: { score: 'abc', institute_rank: null, total_problems_solved: '' } }), NULL_STATS);
+  assert.equal(parseGfgStats({ data: { score: '900' } }).score, 900);
 });
