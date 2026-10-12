@@ -6,7 +6,7 @@ GFG GitHub Sync is a free, open-source browser extension. It has no servers, no 
 
 ## What the extension stores
 Everything is stored only in your browser via `chrome.storage.local`:
-- Your GitHub personal access token, repository name, branch and commit message template
+- Your GitHub access token (from "Connect GitHub", or a personal access token you paste), repository name, branch and commit message template
 - Your GeeksforGeeks username (optional)
 - A small retry queue of submissions that failed to upload, plus the last sync status and cached GFG stats
 
@@ -23,9 +23,10 @@ Nothing is sent to the developer or to any third party. The extension never logs
 | `alarms` | Retry failed uploads every 5 minutes |
 | `https://*.geeksforgeeks.org/*` | Detect accepted submissions and read problem details |
 | `https://api.github.com/*` | Commit solutions to your repository |
+| `https://github.com/login/*` | "Connect GitHub" sign-in (OAuth device flow) |
 
 ## Removing your data
-Uninstalling the extension deletes all locally stored data. Revoke the token at <https://github.com/settings/tokens> if you no longer use it. Files already committed to your repository stay there until you delete them.
+Uninstalling the extension deletes all locally stored data. To revoke access, click Disconnect in the popup and remove "GFG GitHub Sync" at <https://github.com/settings/applications> (or delete your personal access token at <https://github.com/settings/tokens>). Files already committed to your repository stay there until you delete them.
 
 ## Contact
 Open an issue at <https://github.com/nishant4605/gfg-github-sync/issues>.

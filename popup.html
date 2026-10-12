@@ -9,21 +9,45 @@
 
   <label class="row"><input type="checkbox" id="enabled" /> Enable auto-sync</label>
 
-  <label>GitHub token (needs repo write access)
-    <input type="password" id="token" placeholder="github_pat_..." />
-  </label>
-  <label>Repository (owner/name)
-    <input id="repo" placeholder="yourname/gfg-solutions" />
-  </label>
-  <label>Branch
-    <input id="branch" placeholder="main" />
+  <section class="card" id="gh">
+    <div id="gh-idle">
+      <button id="connect">Connect GitHub</button>
+    </div>
+    <div id="gh-pending" hidden>
+      <div class="muted">Enter this code on GitHub:</div>
+      <div class="code" id="usercode"></div>
+      <div class="btns">
+        <button id="open-gh">Copy code &amp; open GitHub</button>
+        <button id="cancel" class="secondary">Cancel</button>
+      </div>
+      <div class="muted small">Waiting for you to authorize…</div>
+    </div>
+    <div id="gh-connected" hidden>
+      <span>✅ GitHub: <b id="login"></b></span>
+      <button id="logout" class="link">Disconnect</button>
+    </div>
+    <div id="gh-error" class="err small" hidden></div>
+  </section>
+
+  <label>Repository (paste the GitHub URL)
+    <input id="repo" placeholder="https://github.com/you/gfg-solutions" />
   </label>
   <label>GFG username (for rank/score)
     <input id="handle" placeholder="your-gfg-handle" />
   </label>
-  <label>Commit message template
-    <input id="template" />
-  </label>
+
+  <details id="advanced">
+    <summary>Advanced</summary>
+    <label>Branch
+      <input id="branch" placeholder="main" />
+    </label>
+    <label>Commit message template
+      <input id="template" />
+    </label>
+    <label>Personal access token (instead of Connect GitHub)
+      <input type="password" id="pat" placeholder="github_pat_..." autocomplete="off" />
+    </label>
+  </details>
 
   <div class="btns">
     <button id="save">Save</button>

@@ -2,6 +2,7 @@ import { putFile, getFile, testConnection } from './lib/github.js';
 import { rootReadme, problemReadme } from './lib/readme.js';
 import { normLang, localDate, fetchGfgStats } from './lib/util.js';
 import { emptyIndex, resolveTarget, commitMessage, upsertEntry } from './lib/sync.js';
+import { requestDeviceCode, waitForToken, getLogin } from './lib/auth.js';
 
 const DEFAULTS = { token: '', repo: '', branch: 'main', handle: '', enabled: true, template: 'Solved: {title} ({difficulty}) - {language}' };
 const MAX_QUEUE = 50;
@@ -102,6 +103,44 @@ async function refreshStats() {
   return stats;
 }
 
+// ----- GitHub login (device flow). Runs outside the sync chain so it never blocks submissions. -----
+const setAuth = (auth) => chrome.storage.local.set({ auth });
+
+async function startLogin() {
+  const flow = await requestDeviceCode();
+  const auth = { state: 'pending', userCode: flow.userCode, verificationUri: flow.verificationUri, expiresAt: flow.expiresAt };
+  await setAuth(auth);
+  pollLogin(flow); // continues in the background; popup watches storage
+  return { ok: true, auth };
+}
+
+async function pollLogin(flow) {
+  // Reading storage each round is an extension API call, which also keeps the MV3 worker alive.
+  const shouldStop = async () => (await chrome.storage.local.get('auth')).auth?.userCode !== flow.userCode;
+  try {
+    const token = await waitForToken(flow, { shouldStop });
+    if (!token) return;
+    const login = await getLogin(token);
+    await chrome.storage.local.set({ token, authMethod: 'oauth' });
+    await setAuth({ state: 'connected', login });
+    await setStatus(true, `Connected to GitHub as ${login}`);
+  } catch (err) {
+    await setAuth({ state: 'error', msg: err.message });
+  }
+}
+
+async function logout() {
+  await chrome.storage.local.set({ token: '', authMethod: '', auth: { state: 'idle' } });
+  return { ok: true };
+}
+
+// Not serialized: these don't touch the repo.
+const DIRECT_HANDLERS = {
+  AUTH_START: startLogin,
+  AUTH_CANCEL: async () => { await setAuth({ state: 'idle' }); return { ok: true }; },
+  LOGOUT: logout,
+};
+
 const HANDLERS = {
   SUBMISSION: (msg) => handleSubmission(msg.payload),
   TEST: async () => ({ ok: true, repo: await testConnection(await getCfg()) }),
@@ -110,6 +149,11 @@ const HANDLERS = {
 };
 
 chrome.runtime.onMessage.addListener((msg, _sender, send) => {
+  const direct = DIRECT_HANDLERS[msg?.type];
+  if (direct) {
+    direct(msg).then(send, (err) => send({ ok: false, msg: err.message }));
+    return true;
+  }
   const handler = HANDLERS[msg?.type];
   if (!handler) return false;
   enqueue(async () => {

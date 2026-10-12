@@ -5,11 +5,16 @@ Free, open-source Chrome extension (Manifest V3) that commits your accepted Geek
 No servers, no analytics. See [PRIVACY.md](PRIVACY.md). Found a bug or GFG changed its site? [Open an issue](https://github.com/nishant4605/gfg-github-sync/issues).
 
 ## Setup
-1. `chrome://extensions` → enable **Developer mode** → **Load unpacked** → pick this folder.
-2. Create a GitHub repo (initialize it with a README so the branch exists).
-3. Create a [fine-grained token](https://github.com/settings/personal-access-tokens/new) scoped to **only that repo**, permission **Contents: Read and write**.
-4. Open the extension popup → fill token, repo (`owner/name`), branch, GFG username → **Test connection**.
-5. Solve a problem on GFG. The page console shows `[GFG Sync] Submission detected`, and the badge turns green ✓.
+1. Install the extension (for now: `chrome://extensions` → **Developer mode** → **Load unpacked** → this folder).
+2. Create a GitHub repo for your solutions (tick "Add a README" so the branch exists).
+3. Click the extension icon → **Connect GitHub** → **Copy code & open GitHub** → paste the code → **Authorize**.
+4. Paste the repo URL and your GFG username → **Save** → **Test connection**.
+5. Solve a problem on GFG. The badge turns green ✓ and a commit appears.
+
+Prefer not to use OAuth? Open **Advanced** in the popup and paste a [fine-grained token](https://github.com/settings/personal-access-tokens/new) (that repo only, **Contents: Read and write**).
+
+### Maintainers: OAuth App registration (one time)
+[New OAuth App](https://github.com/settings/applications/new): name `GFG GitHub Sync`, homepage = this repo, callback URL = this repo (unused by device flow), tick **Enable Device Flow**. Put the **Client ID** (not a secret) in `lib/auth.js` → `GITHUB_CLIENT_ID`. Never create or commit a client secret; device flow doesn't need one.
 
 ## What gets committed
 ```

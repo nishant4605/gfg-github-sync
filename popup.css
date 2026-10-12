@@ -10,3 +10,13 @@ button { flex: 1; padding: 7px; border: 0; border-radius: 6px; background: var(-
 button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--line); }
 .status { margin-top: 12px; min-height: 18px; word-break: break-word; }
 .ok { color: #2e7d32; } .err { color: #c62828; }
+.card { border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin: 10px 0; }
+.card button { width: 100%; }
+#gh-connected { display: flex; align-items: center; justify-content: space-between; }
+#gh-connected[hidden], [hidden] { display: none !important; }
+.code { font: 600 22px ui-monospace, Consolas, monospace; letter-spacing: 3px; text-align: center; margin: 8px 0; user-select: all; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; margin-top: 6px; }
+button.link { width: auto; background: none; border: 0; color: var(--muted); text-decoration: underline; padding: 0; flex: none; }
+details { margin: 8px 0; }
+summary { cursor: pointer; color: var(--muted); }
