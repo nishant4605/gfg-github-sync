@@ -25,7 +25,7 @@ problems.json                      # index (source of truth)
 Problems/<Difficulty>/<slug>/solution.<ext> + README.md
 Contests/<contest>/<slug>/solution.<ext> + README.md
 ```
-The same language overwrites the file (git keeps history). A new language adds a file. Identical code makes no commit.
+Each solve is **one commit** (solution + READMEs + index together). The same language overwrites the file (git keeps history). A new language adds a file. Identical code makes no commit.
 
 ## Development
 ```

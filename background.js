@@ -1,7 +1,7 @@
-import { putFile, getFile, testConnection } from './lib/github.js';
+import { commitChanges, testConnection } from './lib/github.js';
 import { rootReadme, problemReadme } from './lib/readme.js';
 import { normLang, localDate, fetchGfgStats } from './lib/util.js';
-import { emptyIndex, resolveTarget, commitMessage, upsertEntry } from './lib/sync.js';
+import { parseIndex, serializeIndex, resolveTarget, commitMessage, upsertEntry } from './lib/sync.js';
 import { requestDeviceCode, waitForToken, getLogin } from './lib/auth.js';
 
 const DEFAULTS = { token: '', repo: '', branch: 'main', handle: '', enabled: true, template: 'Solved: {title} ({difficulty}) - {language}' };
@@ -25,31 +25,27 @@ async function setStatus(ok, msg) {
 let chain = Promise.resolve();
 const enqueue = (fn) => (chain = chain.then(fn, fn));
 
-async function loadIndex(cfg) {
-  const f = await getFile(cfg, 'problems.json');
-  if (!f) return emptyIndex();
-  try {
-    return { ...emptyIndex(), ...JSON.parse(f.content) };
-  } catch {
-    throw new Error('problems.json in the repo is not valid JSON; fix or delete it');
-  }
-}
-
+/** Commit solution + problem README + index + root README as ONE commit. */
 async function syncSubmission(cfg, sub) {
   const lang = normLang(sub.language, sub.code);
-  const index = await loadIndex(cfg);
-  const { base, difficulty } = resolveTarget(index, sub);
-  const msg = commitMessage(cfg.template, { title: sub.title, difficulty, language: lang.name, slug: sub.slug });
-
-  const solution = await putFile(cfg, `${base}/solution.${lang.ext}`, sub.code, msg);
-
-  const today = localDate(new Date(sub.solvedAt));
-  const { entry } = upsertEntry(index, { ...sub, difficulty }, lang, base, today);
-
-  await putFile(cfg, `${base}/README.md`, problemReadme(entry), `Update README: ${sub.title}`);
-  await putFile(cfg, 'problems.json', JSON.stringify(index, null, 2) + '\n', `Update index: ${sub.title}`);
-  await putFile(cfg, 'README.md', rootReadme(index), 'Update stats README');
-  return { changed: solution.changed };
+  let solutionPath;
+  const { changed } = await commitChanges(cfg, async (read) => {
+    const index = parseIndex(await read('problems.json'));
+    const { base, difficulty } = resolveTarget(index, sub);
+    solutionPath = `${base}/solution.${lang.ext}`;
+    const { entry } = upsertEntry(index, { ...sub, difficulty }, lang, base, localDate(new Date(sub.solvedAt)));
+    const solvedMsg = commitMessage(cfg.template, { title: sub.title, difficulty, language: lang.name, slug: sub.slug });
+    return {
+      files: {
+        [solutionPath]: sub.code,
+        [`${base}/README.md`]: problemReadme(entry),
+        'problems.json': serializeIndex(index),
+        'README.md': rootReadme(index),
+      },
+      message: (paths) => (paths.includes(solutionPath) ? solvedMsg : `Update stats: ${sub.title}`),
+    };
+  });
+  return { changed: changed.includes(solutionPath) };
 }
 
 async function pushToQueue(sub) {
@@ -95,10 +91,11 @@ async function refreshStats() {
   const stats = await fetchGfgStats(cfg.handle);
   await chrome.storage.local.set({ stats });
   if (cfg.token && cfg.repo) {
-    const index = await loadIndex(cfg);
-    index.stats = stats;
-    await putFile(cfg, 'problems.json', JSON.stringify(index, null, 2) + '\n', 'Update GFG stats');
-    await putFile(cfg, 'README.md', rootReadme(index), 'Update stats README');
+    await commitChanges(cfg, async (read) => {
+      const index = parseIndex(await read('problems.json'));
+      index.stats = stats;
+      return { files: { 'problems.json': serializeIndex(index), 'README.md': rootReadme(index) }, message: 'Update GFG stats' };
+    });
   }
   return stats;
 }
