@@ -66,9 +66,11 @@ window.addEventListener('message', (ev) => {
   if (!code) { console.warn('[GFG Sync] Success detected but editor code not found.'); return; }
   const payload = { ...scrapeMeta(reqBody), code, solvedAt: new Date().toISOString() };
   console.log('[GFG Sync] Submission detected:', payload.title, payload.difficulty, payload.language);
-  try {
-    chrome.runtime.sendMessage({ type: 'SUBMISSION', payload }).catch((e) => console.warn('[GFG Sync] send failed:', e.message));
-  } catch (e) {
-    console.warn('[GFG Sync] Extension was reloaded; refresh this tab to resume syncing.', e.message);
+  // After the extension is reloaded, scripts in already-open tabs lose chrome.runtime. Expected, not an error.
+  if (!chrome.runtime?.id) {
+    console.info('[GFG Sync] Extension was reloaded; refresh this tab (F5) to resume syncing.');
+    return;
   }
+  chrome.runtime.sendMessage({ type: 'SUBMISSION', payload })
+    .catch((e) => console.info('[GFG Sync] Could not reach the extension; refresh this tab (F5).', e.message));
 });
