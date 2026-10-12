@@ -24,7 +24,8 @@ function renderAuth({ auth = {}, token, authMethod }) {
   $('gh-error').hidden = auth.state !== 'error';
   $('gh-error').textContent = auth.msg || '';
   $('revoke').hidden = !auth.disconnected;
-  if (!connected && authMethod !== 'oauth' && token) $('advanced').open = true; // manual token in use
+  if (connected) $('pat').value = ''; // OAuth replaces any manual token; don't let Save restore it
+  else if (authMethod !== 'oauth' && token) $('advanced').open = true; // manual token in use
 }
 
 async function load() {
